@@ -1,0 +1,37 @@
+!*************HEADING***********************************
+!  TUD Waves unit - Irregular waves 
+!***********MODEL INPUT*********************************
+
+MODE ONEDIMENSIONAL
+CGRID  0.   0.   0. 35. 0. 350 0
+VERT 3
+
+INPGRID BOTTOM 0. 0. 0. 1750 0 0.02 0.
+READINPUT BOTTOM  1. 'bed_profile.bot' 1 0 FREE
+
+NONHYDROSTATIC
+BREAK 
+VISCOSITY VERTICAL KEPS 
+FRIC MANNING 0.010
+
+SET LEVEL = 0.50 
+
+BOUNd SHAPespec JONswap 3.3 SIG PEAK DSPR DEGR
+BOUNdcond SIDE W CCW BTYPE WEAK ADDBoundwave CON SPECTRUM 0.07 2.0 90 0 001000
+
+DISCRET UPW MOM
+TIMEI 0.4 0.8
+
+!************ OUTPUT REQUESTS *************************
+
+POINTS 'GAUGE1' 8.  0 
+TABLE  'GAUGE1' HEAD 'gauge1.tbl' TSEC WATLEV VEL OUTPUT 000000.000 0.05 SEC
+
+GROUP 'grp' SUBGrid 1 350 1 1 
+TABLE 'grp' NOHEAD 'grid_output.tbl' TSEC  XP WATLEV BOTLEV VEL DEPTH OUTPUT 000000.000 0.1 SEC
+
+COMPUTE 000000.000 0.025 SEC 000200.000
+
+STOP
+
+
